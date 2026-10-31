@@ -1,0 +1,9 @@
+/build*/
+/bin/
+/.vs/
+*.user
+*.suo
+*.asi
+*.pdb
+*.log
+/.jsondev-*

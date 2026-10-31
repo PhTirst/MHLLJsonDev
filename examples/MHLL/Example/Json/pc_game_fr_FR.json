@@ -1,0 +1,18 @@
+[
+  {
+    "Key": "PLAY",
+    "en_US": "Start",
+    "fr_FR": "Démarrer",
+    "zh_CN": "开始",
+    "ja_JP": "開始",
+    "ko_KR": "시작"
+  },
+  {
+    "Key": "SAMPLE",
+    "en_US": "Example ~blue~blue~colour~ text",
+    "fr_FR": "Exemple de texte ~blue~bleu~colour~",
+    "zh_CN": "示例~blue~蓝色~colour~文字",
+    "ja_JP": "例の~blue~青色~colour~文字",
+    "ko_KR": "예시 ~blue~파란색~colour~ 글자"
+  }
+]

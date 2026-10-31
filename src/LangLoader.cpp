@@ -1,4 +1,9 @@
 #include "LangLoader.h"
+#include "jsondev/Language.h"
+#ifdef MHLL_ENABLE_JSON_GXT_CACHE
+#include "JsonDevBuilder.h"
+#include "jsondev/Files.h"
+#endif
 #include <Windows.h>
 #include <math.h>
 
@@ -64,6 +69,7 @@ CLanguage::CLanguage(char *inipath) :
 	data(NULL),
 	txd(NULL),
 	nameKey(""),
+	basePath(""),
 	dataPath(""),
 	txdPath(""),
 	textDirPath(""),
@@ -78,6 +84,9 @@ CLanguage::CLanguage(char *inipath) :
 	strcpy_s(path, inipath);
 	PathRemoveFileSpec(path);
 	strcat_s(path, "\\");
+	basePath = path;
+	if ( GetPrivateProfileString("LANG", "JsonLanguage", "", buf, MAX_PATH, inipath) )
+		jsonLanguage = buf;
 
 	if ( GetPrivateProfileString("LANG",  "NameKey", "UNKNOWNLANG", buf, MAX_PATH, inipath) )
 		nameKey = buf;
@@ -117,6 +126,11 @@ std::string CLanguage::GetGXTPath(const std::string &gamepath)
 	while (path.find(Keyword) != std::string::npos)
 		path.replace(path.find(Keyword), Keyword.length(), gamepath);
 	return path;
+}
+
+std::string CLanguage::GetJsonLanguageKey() const
+{
+	return jsondev::LanguageColumn(jsonLanguage, levelGXTPostfix, gameGXTName);
 }
 
 void CLanguageLoader::LoadSystem(char *path, void *data)
@@ -312,6 +326,18 @@ bool CLanguageLoader::FontLoadDatas(char *path)
 void CLanguageLoader::FontInitialise()
 {
 	CFrontend::FontInitialise();
+#ifdef MHLL_ENABLE_JSON_GXT_CACHE
+	for (CLanguage &lang : ms_langs)
+	{
+		// Generation runs before the loader opens any GXT, DAT or TXD.
+		if (JsonDevBuilder::RefreshLanguage(
+			jsondev::AnsiToUtf8(lang.basePath), jsondev::AnsiToUtf8(lang.textDirPath),
+			lang.GetJsonLanguageKey(), jsondev::AnsiToUtf8(lang.dataPath), jsondev::AnsiToUtf8(lang.txdPath)) < 0)
+			ErrorMsg("MHLLJsonDev: resource generation stopped.\nSee %sJsonDev.log for the file and error before using the outputs.", lang.basePath.c_str());
+	}
+#else
+	Sleep(100);
+#endif
 	LoadStrings();
 	LoadTxd();
 	LoadDatas();

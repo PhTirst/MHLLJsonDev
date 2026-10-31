@@ -106,6 +106,8 @@ public:
 
 	// config
 	std::string        nameKey;
+	std::string        basePath;
+	std::string        jsonLanguage;
 	std::string        dataPath;
 	std::string        txdPath;
 	std::string        textDirPath;
@@ -116,6 +118,7 @@ public:
 
 	CLanguage(char *inipath);
 	std::string GetGXTPath(const std::string &gamepath);
+	std::string GetJsonLanguageKey() const;
 };
 
 class CFEP_LanguageEx //: public CBasePage

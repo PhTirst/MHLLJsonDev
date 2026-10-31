@@ -1,0 +1,16 @@
+{
+  "useBaseGlyphs": true,
+  "baseFontWorkspace": "BaseFont",
+  "zeroWidthWrap": true,
+  "replaceEllipsis": false,
+  "mapChinesePunctuation": false,
+  "mapLowercaseToUppercaseForLcdLoading": false,
+  "ttfDirectory": "TTF",
+  "workerThreads": 0,
+  "maxAutoWorkerThreads": 0,
+  "parallelGlyphRender": true,
+  "parallelDxt3": true,
+  "fixedCjkWidth": 0,
+  "cjkAdvanceWidth": 0,
+  "debug": false
+}

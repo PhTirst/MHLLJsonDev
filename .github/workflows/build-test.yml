@@ -1,0 +1,32 @@
+name: Windows x86 build and test
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  windows:
+    runs-on: windows-2022
+    strategy:
+      fail-fast: false
+      matrix:
+        configuration: [Debug, Release]
+    steps:
+      - uses: actions/checkout@v4
+      - name: Configure (MSVC x86, static runtime)
+        run: cmake -S . -B build -G "Visual Studio 17 2022" -A Win32 -DBUILD_TESTING=ON
+      - name: Build standard and JsonDev plugins
+        run: cmake --build build --config ${{ matrix.configuration }} --parallel
+      - name: Synthetic resource regression tests
+        run: ctest --test-dir build -C ${{ matrix.configuration }} --output-on-failure
+      - name: Keep test diagnostics on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-log-${{ matrix.configuration }}
+          path: build/Testing/Temporary/LastTest.log
+          if-no-files-found: ignore
