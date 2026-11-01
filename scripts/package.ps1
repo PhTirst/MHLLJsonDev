@@ -1,6 +1,7 @@
 param(
     [string]$SourceTag = '',
     [string]$BuildDirectory = 'build',
+    [string]$OutputDirectory = 'build-package\release',
     [ValidateRange(1, 256)][int]$Jobs = 2
 )
 $ErrorActionPreference = 'Stop'
@@ -32,7 +33,8 @@ $output = Join-Path $root 'build-package'
 $name = "MHLLJsonDev-$version-windows-x86"
 $stage = Join-Path $output ('stage-' + [guid]::NewGuid().ToString('N'))
 $package = Join-Path $stage $name
-$release = Join-Path $output 'release'
+$release = [IO.Path]::GetFullPath((Join-Path $root $OutputDirectory))
+if (-not $release.StartsWith($output.TrimEnd('\') + '\', [StringComparison]::OrdinalIgnoreCase)) { throw 'OutputDirectory must be a subdirectory of build-package/.' }
 New-Item -ItemType Directory -Force -Path $package, $release | Out-Null
 Copy-Item -LiteralPath (Join-Path $build 'bin\Release\MHLLJsonDev.asi') -Destination $package
 New-Item -ItemType Directory -Path (Join-Path $package 'standard-loader'), (Join-Path $package 'diagnostics') | Out-Null
