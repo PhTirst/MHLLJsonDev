@@ -6,7 +6,7 @@
 
 [![Windows x86 构建与测试](https://github.com/PhTirst/MHLLJsonDev/actions/workflows/build-test.yml/badge.svg?branch=jsondev)](https://github.com/PhTirst/MHLLJsonDev/actions/workflows/build-test.yml)
 
-**开发预览版：**默认分支 `jsondev` 包含本项目功能，`main` 保留上游基线。首次发布提供源码，不附预编译 ASI。详见[版本记录](CHANGELOG.md)及[验证边界](docs/VERIFICATION.md)。
+**开发预览版：**默认分支 `jsondev` 包含本项目功能，`main` 保留上游基线。[Release v0.1.0](https://github.com/PhTirst/MHLLJsonDev/releases/tag/v0.1.0) 现已补充预编译 Windows x86 ASI 工具包及 SHA-256 校验文件。详见 [Windows 工具包说明](docs/WINDOWS_PACKAGE.md)、[版本记录](CHANGELOG.md)及[验证边界](docs/VERIFICATION.md)。
 
 它不是改名伪装的普通 MHLL。开发时使用 `MHLLJsonDev.asi`；玩家版使用普通 `MHLL.asi` 加生成后的资产，不需要 JSON 或 TTF。**两个 ASI 不要同时加载。**
 
@@ -36,7 +36,9 @@ ctest --test-dir build -C Release --output-on-failure
 | `build/bin/Release/MHLL.asi` | 普通版，不链接 JSON 解析、TTF 渲染和资源生成模块 |
 | `build/Release/JsonDevTests.exe` | 独立自动测试，不启动、不注入游戏 |
 
-GitHub Actions 在 Windows x86 上分别构建并测试 Debug、Release，不会自动发布 Release，也不会上传游戏资源或字体。项目不再依赖 Premake。
+GitHub Actions 在 Windows x86 上分别构建并测试 Debug、Release，并把经过打包校验的 Release 工具包保存为 CI 附件；不会自动发布 GitHub Release，也不会上传游戏资源或字体。项目不再依赖 Premake。
+
+使用预编译包时，完整解压后只把根目录的 `MHLLJsonDev.asi` 复制进游戏。`standard-loader/MHLL.asi` 是普通版替代品，不是需要同时安装的第二个插件。包内不含字体、完整译文或 ASI Loader，示例也不是可玩的汉化包。使用静态 C++ 运行库，无需另外安装 VC++ 运行库。源码下可运行 `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\package.ps1 -SourceTag v0.1.0` 重现打包；安装与校验步骤详见[工具包说明](docs/WINDOWS_PACKAGE.md)。
 
 ## 开发包放在哪里
 

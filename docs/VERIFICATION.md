@@ -1,5 +1,18 @@
 # Local Verification / 本地验证
 
+## 2026-11-01 Binary Supplement / 预编译包补充
+
+- Rebuilt Debug and Release in a fresh `build-binary-release` directory using MSVC 19.44 and the Windows 10.0.26100 SDK. Both CTest runs passed 32,054 assertions, and the Release test executable also passed after extraction from the package.
+- Plugin sources, tests, CMake configuration, include files and minimal ABI declarations are unchanged from `v0.1.0` (`5587fdd8f7a4c4551e74426dcc08c9c7f6767b58`). The tag is not moved; the follow-up branch changes only packaging, documentation and CI.
+- Checked Release imports with `dumpbin /DEPENDENTS`: MHLL depends on SHLWAPI/KERNEL32; JsonDev adds USER32 and delay-loaded GDI+. The synthetic test uses SHLWAPI/GDI+/KERNEL32. No external VC++ runtime DLL is imported.
+- Package checks passed: manifest/file hashes, x86 PE32 DLL/executable types, exact required payloads, no fonts/game resources/build caches, and standalone regression. Seven negative archive tests reject tampering, traversal, duplicate entries, font payloads, unlisted/missing files and wrong binary architecture.
+- `MHLLJsonDev.asi` is at the package root. The alternative ordinary `MHLL.asi` is isolated under `standard-loader/`, not installed alongside it automatically. Examples are synthetic and incomplete; no ASI loader is bundled.
+- No game was launched, deployed to or modified for this supplement. These are build/core/package tests, not new in-game certification. Upstream attribution and unresolved licensing status remain as documented in `PROVENANCE.md`.
+
+本次补充 Windows x86 开发预览包，重新完成 Debug、Release 和解压后测试；没有修改字体生成/Hook 逻辑，没有部署游戏。GitHub Actions 另行执行的结果以远端记录为准。2026-10-31 的“仅源码”说明是首次发布时的历史状态，现已补充二进制，但没有新增稳定版或游戏实测承诺。
+
+## Initial Source Preparation / 首次源码整理
+
 Date: 2026-10-31 (Asia/Shanghai).
 
 ## Repository / 仓库

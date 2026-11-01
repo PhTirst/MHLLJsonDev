@@ -17,12 +17,27 @@ jobs:
         configuration: [Debug, Release]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
       - name: Configure (MSVC x86, static runtime)
         run: cmake -S . -B build -G "Visual Studio 17 2022" -A Win32 -DBUILD_TESTING=ON
       - name: Build standard and JsonDev plugins
         run: cmake --build build --config ${{ matrix.configuration }} --parallel
       - name: Synthetic resource regression tests
         run: ctest --test-dir build -C ${{ matrix.configuration }} --output-on-failure
+      - name: Package and verify extracted Release tools
+        if: matrix.configuration == 'Release'
+        shell: pwsh
+        run: ./scripts/package.ps1
+      - name: Keep prebuilt Windows x86 tools
+        if: matrix.configuration == 'Release'
+        uses: actions/upload-artifact@v4
+        with:
+          name: MHLLJsonDev-windows-x86
+          path: |
+            build-package/release/*.zip
+            build-package/release/*.sha256
+          if-no-files-found: error
       - name: Keep test diagnostics on failure
         if: failure()
         uses: actions/upload-artifact@v4

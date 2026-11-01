@@ -6,7 +6,7 @@ Development-time JSON and TTF resource generation for **Manhunt 1**, built on [F
 
 [![Windows x86 build and test](https://github.com/PhTirst/MHLLJsonDev/actions/workflows/build-test.yml/badge.svg?branch=jsondev)](https://github.com/PhTirst/MHLLJsonDev/actions/workflows/build-test.yml)
 
-**Development preview:** the default `jsondev` branch contains these additions; `main` is retained as the upstream baseline. The initial source release does not bundle prebuilt ASI binaries. See [release notes](CHANGELOG.md) and [verification boundaries](docs/VERIFICATION.md).
+**Development preview:** the default `jsondev` branch contains these additions; `main` is retained as the upstream baseline. [Release v0.1.0](https://github.com/PhTirst/MHLLJsonDev/releases/tag/v0.1.0) now includes a prebuilt Windows x86 ASI package and SHA-256 checksum. See [Windows package instructions](docs/WINDOWS_PACKAGE.md), [release notes](CHANGELOG.md) and [verification boundaries](docs/VERIFICATION.md).
 
 This is a development plugin, not a replacement name for standard MHLL. It generates ordinary GXT + DAT + DXT3 TXD assets before MHLL loads a language. For a player release, remove the development inputs and use standard `MHLL.asi` with the generated assets. Do not load both plugins simultaneously.
 
@@ -37,7 +37,9 @@ Build products:
 | `build/bin/Release/MHLL.asi` | Standard loader: no JSON parser, TTF renderer or generation code linked |
 | `build/Release/JsonDevTests.exe` | Standalone tests; does not launch or patch the game |
 
-The GitHub Actions workflow builds and tests Debug and Release on Windows x86. It does not publish a release or game/font assets. There are no Premake build steps.
+The GitHub Actions workflow builds and tests Debug and Release on Windows x86, then packages and audits the Release binaries as a CI artifact. It does not publish a GitHub Release or game/font assets automatically. There are no Premake build steps.
+
+For prebuilt use, extract the Windows ZIP and copy only `MHLLJsonDev.asi` into the game. `standard-loader/MHLL.asi` is an alternative, not a second plugin to install. Supply your own language package, fonts and ASI loader; `examples/` is not a playable translation. The runtime is statically linked. To reproduce a tagged package, run `powershell -NoProfile -ExecutionPolicy Bypass -File .\scripts\package.ps1 -SourceTag v0.1.0`. See the [package guide](docs/WINDOWS_PACKAGE.md) for installation and verification.
 
 ## Language Package Layout
 

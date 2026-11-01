@@ -1,5 +1,14 @@
 # Changelog / 版本记录
 
+## 0.1.0 Binary Supplement - 2026-11-01 / 预编译包补充
+
+- Add a Windows x86 development-preview package built from the unchanged `v0.1.0` plugin sources. The existing tag is not moved.
+- Include `MHLLJsonDev.asi`, a separate `standard-loader/MHLL.asi` alternative, a synthetic test executable, examples and bilingual instructions. No game/font assets or ASI loader are bundled.
+- Add reproducible packaging, per-file hashes, x86 PE checks, extracted-test verification and a Release CI artifact.
+- Preserve upstream attribution and the unresolved licensing notice. Automated regression is not new in-game certification.
+
+补充 Windows x86 预编译 ASI，沿用原标签的插件源码，不改 Hook 或字体生成逻辑、不移动标签。普通版放在单独目录，避免双插件误加载。附打包脚本、校验清单、测试和中英文说明；仍保留开发预览及原作者许可边界提示。
+
 ## 0.1.0 - Development Preview / 开发预览
 
 Initial source-only release, based on Fire-Head/MHLL 1.3 (`ae523f162480f4200f470ef2120bb27a88cfc620`).
